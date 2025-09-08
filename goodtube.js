@@ -785,9 +785,9 @@
 			) {
 				if (
 					// Speed up playback
-					keyPressed === '.' ||
+					keyPressed === '>' ||
 					// Slow down playback
-					keyPressed === ','
+					keyPressed === '<'
 				) {
 					event.preventDefault();
 					event.stopImmediatePropagation();
@@ -797,7 +797,7 @@
 				}
 
 				// If we're not holding down the shift key
-				
+				if (!event.shiftKey) {
 					// If we're focused on the video element
 					if (focusedElement && typeof focusedElement.closest !== 'undefined' && focusedElement.closest('#goodTube_player')) {
 						// Theater mode (focus the body, this makes the default youtube shortcut work)
@@ -808,9 +808,9 @@
 
 					if (
 						// Prev frame (24fps calculation)
-						keyPressed === '[' ||
+						keyPressed === ',' ||
 						// Next frame (24fps calculation)
-						keyPressed === ']' ||
+						keyPressed === '.' ||
 						// Prev 5 seconds
 						keyPressed === 'arrowleft' ||
 						// Next 5 seconds
@@ -1433,8 +1433,8 @@
 				background: #0f0f0f;
 				border-radius: 9999px;
 				box-shadow: 0 0 10px rgba(0, 0, 0, .5);
-				width: 30px;
-				height: 30px;
+				width: 48px;
+				height: 48px;
 				z-index: 999;
 				transition: background .2s linear, box-shadow .2s linear, opacity .2s linear;
 				opacity: 1;
@@ -2475,7 +2475,7 @@
 			}
 
 			// Speed up playback
-			else if (keyPressed === '.') {
+			else if (keyPressed === '>') {
 				if (goodTube_iframe_api && typeof goodTube_iframe_api.getPlaybackRate === 'function' && typeof goodTube_iframe_api.setPlaybackRate === 'function') {
 					let playbackRate = goodTube_iframe_api.getPlaybackRate();
 
@@ -2504,7 +2504,7 @@
 			}
 
 			// Slow down playback
-			else if (keyPressed === ',') {
+			else if (keyPressed === '<') {
 				if (goodTube_iframe_api && typeof goodTube_iframe_api.getPlaybackRate === 'function' && typeof goodTube_iframe_api.setPlaybackRate === 'function') {
 					let playbackRate = goodTube_iframe_api.getPlaybackRate();
 
@@ -2533,16 +2533,16 @@
 			}
 
 			// If we're not holding down the shift key
-			
+			if (!event.shiftKey) {
 				// Prev frame (24fps calculation)
-				if (keyPressed === ']') {
+				if (keyPressed === ',') {
 					if (player.paused || player.ended) {
 						player.currentTime -= 0.04166666666666667;
 					}
 				}
 
 				// Next frame (24fps calculation)
-				if (keyPressed === '[') {
+				if (keyPressed === '.') {
 					if (player.paused || player.ended) {
 						player.currentTime += 0.04166666666666667;
 					}
