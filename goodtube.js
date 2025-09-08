@@ -1433,8 +1433,8 @@
 				background: #0f0f0f;
 				border-radius: 9999px;
 				box-shadow: 0 0 10px rgba(0, 0, 0, .5);
-				width: 48px;
-				height: 48px;
+				width: 25px;
+				height: 25px;
 				z-index: 999;
 				transition: background .2s linear, box-shadow .2s linear, opacity .2s linear;
 				opacity: 1;
