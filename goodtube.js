@@ -2799,8 +2799,7 @@
 
 			/* Style autoplay button */
 			#goodTube_autoplayButton {
-				overflow: visible;
-				position: relative;
+				display: none !important;
 			}
 
 			#goodTube_autoplayButton .ytp-autonav-toggle-button::before {
