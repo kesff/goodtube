@@ -2680,15 +2680,7 @@
 			if (goodTube_iframe_api && typeof goodTube_iframe_api.setPlaybackRate === 'function') {
 				goodTube_iframe_api.setPlaybackRate(parseFloat(goodTube_getParams['goodTube_playbackSpeed']));
 			}
-		}
-
-		// Update the playback speed cookie in the top frame every 100ms
-		setInterval(() => {
-			if (goodTube_iframe_api && typeof goodTube_iframe_api.getPlaybackRate === 'function') {
-				// Tell the top frame to save the playback speed
-				window.top.postMessage('goodTube_playbackSpeed_' + goodTube_iframe_api.getPlaybackRate(), '*');
-			}
-		}, 100);
+		};
 	}
 
 	// Fix links (so they open in the same window)
