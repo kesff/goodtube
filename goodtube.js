@@ -150,10 +150,7 @@
 	// A reference to the previous URL (used to detect when the page changes)
 	let goodTube_previousUrl = false;
 
-	// Have we already turned off Youtube's default autoplay?
-	let goodTube_turnedOffAutoplay = false;
-
-	// Have we already redirected away from a short?
+    // Have we already redirected away from a short?
 	let goodTube_redirectHappened = false;
 
 	// Is this the first video we're loading?
@@ -196,15 +193,6 @@
 
 		if (!goodTube_hideEndScreen) {
 			goodTube_helper_setCookie('goodTube_hideEndScreen', 'true');
-		}
-	}
-
-	// Is autoplay turned on?
-	let goodTube_autoplay = goodTube_helper_getCookie('goodTube_autoplay');
-	if (window.top === window.self) {
-		if (!goodTube_autoplay) {
-			goodTube_helper_setCookie('goodTube_autoplay', 'true');
-			goodTube_autoplay = 'true';
 		}
 	}
 
@@ -563,7 +551,7 @@
 				src=""
 				frameborder="0"
 				scrolling="yes"
-				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 				referrerpolicy="strict-origin-when-cross-origin"
 				allowfullscreen
 				style="display: none;"
@@ -734,7 +722,7 @@
 			}
 
 			// Set the video source
-			goodTube_player.contentWindow.postMessage('goodTube_src_https://www.youtube.com/embed/' + goodTube_getParams['v'] + '?goodTubeEmbed=1&autoplay=1&goodTube_playlist=' + playlist + '&goodTube_autoplay=' + goodTube_autoplay + '&goodTube_playbackSpeed=' + goodTube_playbackSpeed + '&goodTube_hideInfoCards=' + goodTube_hideInfoCards + '&goodTube_hideEndScreen=' + goodTube_hideEndScreen + skipToGetVar, '*');
+			goodTube_player.contentWindow.postMessage('goodTube_src_https://www.youtube.com/embed/' + goodTube_getParams['v'] + '?goodTubeEmbed=1&goodTube_playlist=' + playlist + '&goodTube_autoplay=' + goodTube_autoplay + '&goodTube_playbackSpeed=' + goodTube_playbackSpeed + '&goodTube_hideInfoCards=' + goodTube_hideInfoCards + '&goodTube_hideEndScreen=' + goodTube_hideEndScreen + skipToGetVar, '*');
 
 			// Indicate we've completed the first load
 			goodTube_firstLoad = true;
@@ -1132,17 +1120,6 @@
 		// Populate the playlist info
 		goodTube_player_populatePlaylistInfo();
 
-		// If (autoplay is enabled) OR (we're viewing a playlist AND we're not on the last video)
-		if (
-			goodTube_autoplay === 'true'
-			||
-			(goodTube_playlist && (goodTube_playlistIndex < (goodTube_playlist.length - 1)))
-		) {
-			// Play the next video
-			goodTube_nav_next();
-		}
-	}
-
 	// Show or hide the end screen (based on autoplay, not the setting)
 	function goodTube_nav_showHideEndScreen() {
 		// Re fetch the page API
@@ -1151,9 +1128,6 @@
 		// Show the end screen
 		let hideEndScreen = false;
 
-		// If autoplay is on, hide the end screen
-		if (goodTube_autoplay === 'true') {
-			hideEndScreen = true;
 		}
 
 		// Otherwise, if we're viewing a playlist
@@ -1361,16 +1335,6 @@
 		// Theater mode (toggle) - this should only work when not in fullscreen
 		else if (event.data === 'goodTube_theater' && !document.fullscreenElement) {
 			document.querySelector('.ytp-size-button')?.click();
-		}
-
-		// Autoplay
-		else if (event.data === 'goodTube_autoplay_false') {
-			goodTube_helper_setCookie('goodTube_autoplay', 'false');
-			goodTube_autoplay = 'false';
-		}
-		else if (event.data === 'goodTube_autoplay_true') {
-			goodTube_helper_setCookie('goodTube_autoplay', 'true');
-			goodTube_autoplay = 'true';
 		}
 
 		// Sync main player (only if the "hide and mute ads" fallback is inactive)
@@ -3155,21 +3119,6 @@
 			goodTube_iframe_fullscreen();
 		}
 
-		// Enable autoplay
-		else if (event.data === 'goodTube_autoplay_true') {
-			goodTube_helper_setCookie('goodTube_autoplay', 'true');
-			goodTube_autoplay = 'true';
-			goodTube_iframe_setAutoplay('true');
-		}
-
-		// Disable autoplay
-		else if (event.data === 'goodTube_autoplay_false') {
-			goodTube_helper_setCookie('goodTube_autoplay', 'false');
-			goodTube_autoplay = 'false';
-			goodTube_iframe_setAutoplay('false');
-		}
-	}
-
 	// Go fullscreen
 	let goodTube_iframe_fullscreen_timeout = setTimeout(() => {}, 0);
 	function goodTube_iframe_fullscreen() {
@@ -3407,7 +3356,7 @@
 				src=""
 				frameborder="0"
 				scrolling="yes"
-				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				allow="accelerometer; lipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 				referrerpolicy="strict-origin-when-cross-origin"
 				allowfullscreen
 				id="goodTube_youtube_iframe"
