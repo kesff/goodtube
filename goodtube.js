@@ -714,8 +714,9 @@
 						// Play the video
 						video.play();
 
-						// Speed up to 2x (any faster is detected by Youtube)
-						video.playbackRate = 2;
+						// DISABLE FOR NOW, THIS MAY BE TRIGGERING DETECTION
+						// // Speed up to 2x (any faster is detected by Youtube)
+						// video.playbackRate = 2;
 					}
 				}
 			}
@@ -3229,8 +3230,9 @@
 
 		// If we found the video element
 		if (videoElement) {
-			// Speed up to 2x (any faster is detected by Youtube)
-			videoElement.playbackRate = 2;
+			// DISABLE FOR NOW, THIS MAY BE TRIGGERING DETECTION
+			// // Speed up to 2x (any faster is detected by Youtube)
+			// video.playbackRate = 2;
 
 			// Mute it
 			videoElement.muted = true;
