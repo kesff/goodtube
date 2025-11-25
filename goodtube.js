@@ -1880,6 +1880,9 @@
 		}
 		goodTube_initiated = true;
 
+		// Init our player
+		goodTube_player_init();
+
 		// Check the tab focus state
 		goodTube_checkTabFocus();
 
@@ -1888,9 +1891,6 @@
 
 		// Hide page elements
 		goodTube_youtube_hidePageElements();
-
-		// Init our player
-		goodTube_player_init();
 
 		// Init the "hide and mute ads" fallback
 		goodTube_hideAndMuteAdsFallback_init();
