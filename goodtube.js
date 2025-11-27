@@ -364,6 +364,13 @@
 		goodTube_blackBackground = 'true';
 	}
 
+	// Enable instant pausing
+	let goodTube_instantPause = goodTube_helper_getCookie('goodTube_instantPause');
+	if (!goodTube_instantPause) {
+		goodTube_helper_setCookie('goodTube_instantPause', 'false');
+		goodTube_instantPause = 'false';
+	}
+
 	// Videos per row on the home page
 	let goodTube_videosPerRow = goodTube_helper_getCookie('goodTube_videosPerRow');
 	if (!goodTube_videosPerRow) {
@@ -1072,7 +1079,7 @@
 			}
 
 			// Set the video source
-			goodTube_player.contentWindow.postMessage('goodTube_src_https://www.youtube.com/embed/' + goodTube_getParams['v'] + '?goodTubeEmbed=1&autoplay=1&goodTube_playlist=' + playlist + '&goodTube_autoplay=' + goodTube_autoplay + '&goodTube_playbackSpeed=' + goodTube_playbackSpeed + '&goodTube_hideInfoCards=' + goodTube_hideInfoCards + '&goodTube_hideEndScreen=' + goodTube_hideEndScreen + startTimeParam, '*');
+			goodTube_player.contentWindow.postMessage('goodTube_src_https://www.youtube.com/embed/' + goodTube_getParams['v'] + '?goodTubeEmbed=1&autoplay=1&goodTube_playlist=' + playlist + '&goodTube_autoplay=' + goodTube_autoplay + '&goodTube_playbackSpeed=' + goodTube_playbackSpeed + '&goodTube_hideInfoCards=' + goodTube_hideInfoCards + '&goodTube_hideEndScreen=' + goodTube_hideEndScreen + '&goodTube_instantPause=' + goodTube_instantPause + startTimeParam, '*');
 
 			// Indicate we've completed the first load
 			goodTube_firstLoad = false;
@@ -2257,6 +2264,11 @@
 			blackBackground = ' checked';
 		}
 
+		let instantPause = '';
+		if (goodTube_instantPause === 'true') {
+			instantPause = ' checked';
+		}
+
 		let videosPerRow_default = '';
 		let videosPerRow_2 = '';
 		let videosPerRow_3 = '';
@@ -2354,6 +2366,11 @@
 						<div class='goodTube_setting'>
 							<input type='checkbox' class='goodTube_option_blackBackground' name='goodTube_option_blackBackground' id='goodTube_option_blackBackground'`+ blackBackground + `>
 							<label for='goodTube_option_blackBackground'>Use a black background for the video player</label>
+						</div> <!-- .goodTube_setting -->
+
+						<div class='goodTube_setting'>
+							<input type='checkbox' class='goodTube_option_instantPause' name='goodTube_option_instantPause' id='goodTube_option_instantPause'`+ instantPause + `>
+							<label for='goodTube_option_instantPause'>Enable instant pausing (this disables holding "space", "k" or "left mouse button" for 2x speed)</label>
 						</div> <!-- .goodTube_setting -->
 
 						<div class='goodTube_setting'>
@@ -2970,6 +2987,17 @@
 					}
 					else {
 						goodTube_helper_setCookie('goodTube_blackBackground', 'false');
+					}
+				}
+
+				// Enable instant pausing
+				let goodTube_setting_instantPause = document.querySelector('.goodTube_option_instantPause');
+				if (goodTube_setting_instantPause) {
+					if (goodTube_setting_instantPause.checked) {
+						goodTube_helper_setCookie('goodTube_instantPause', 'true');
+					}
+					else {
+						goodTube_helper_setCookie('goodTube_instantPause', 'false');
 					}
 				}
 
@@ -4356,6 +4384,13 @@
 
 	let goodTube_iframe_supportDoubleSpeed_init_timeout = setTimeout(() => {}, 0);
 	function goodTube_iframe_supportDoubleSpeed_init() {
+		/* Make sure this is enabled
+		-------------------------------------------------- */
+		if (goodTube_getParams['goodTube_instantPause'] === 'true') {
+			return;
+		}
+
+
 		/* Setup vars
 		-------------------------------------------------- */
 		clearTimeout(goodTube_iframe_supportDoubleSpeed_holdTimeout);
