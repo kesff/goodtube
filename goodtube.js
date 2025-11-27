@@ -3845,6 +3845,11 @@
 			.html5-video-player {
 				background: transparent !important;
 			}
+
+			/* Make subtitles visible when paused */
+			.ytp-caption-window-container .caption-window {
+				display: block !important;
+			}
 		`;
 
 		// Enable the picture in picture button (unless you're on firefox)
