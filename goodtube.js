@@ -3608,6 +3608,9 @@
 
 		// Sync the aspect ratio
 		goodTube_iframe_syncAspectRatio();
+
+		// Check for the "immersive translation" plugin
+		goodTube_iframe_checkImmersiveTranslation();
 	}
 
 	// Check to see if the "hide and mute ads" fallback should be active
@@ -3846,8 +3849,8 @@
 				background: transparent !important;
 			}
 
-			/* Make subtitles visible when paused */
-			.ytp-caption-window-container .caption-window {
+			/* Make subtitles visible when paused (but not when using the "immersive translation" plugin) */
+			body:not(.immersive-translation) .caption-window {
 				display: block !important;
 			}
 		`;
@@ -5018,6 +5021,15 @@
 				// Tell the top level window to sync the aspect ratio
 				window.top.postMessage('goodTube_syncAspectRatio_' + aspectRatio[0] + '_' + aspectRatio[1], '*');
 			}
+		}
+	}
+
+	// Check for the "immersive translation" plugin
+	let goodTube_iframe_checkImmersiveTranslation_classAdded = false;
+	function goodTube_iframe_checkImmersiveTranslation() {
+		if (!goodTube_iframe_checkImmersiveTranslation_classAdded && document.querySelector('style[data-id^="immersive-translate"]')) {
+			document.body.classList.add('immersive-translation');
+			goodTube_iframe_checkImmersiveTranslation_classAdded = true;
 		}
 	}
 
