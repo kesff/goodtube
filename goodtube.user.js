@@ -43,10 +43,9 @@
 
 	/* Configure CSP
 	---------------------------------------------------------------------------------------------------- */
+	let goodTube_csp = false;
 	if (window.trustedTypes && window.trustedTypes.createPolicy) {
-		window.trustedTypes.createPolicy("default", {
-			createHTML: string => string,
-			createScriptURL: string => string,
+		goodTube_csp = window.trustedTypes.createPolicy("GoodTubeLoadPolicy", {
 			createScript: string => string
 		});
 	}
@@ -76,10 +75,17 @@
 			// Success
 			.then(response => response.text())
 			.then(data => {
-				// Load the GoodTube code into a <script> tag
+				// Load the GoodTube code into a <script> tag (and use CSP if supported)
 				let script = document.createElement('script');
-				script.innerHTML = data;
-				document.body.appendChild(script);
+
+				if (goodTube_csp) {
+					script.textContent = goodTube_csp.createScript(data);
+				}
+				else {
+					script.textContent = data;
+				}
+
+				document.head.appendChild(script);
 			})
 			// Error
 			.catch((error) => {
