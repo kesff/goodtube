@@ -4329,7 +4329,7 @@
 			goodTube_iframe_supportDoubleSpeed_allowNextClick = false;
 
 			// Focus the video element
-			setTimeout(goodTube_iframe_supportDoubleSpeed_videoElement.focus());
+			setTimeout(() => { goodTube_iframe_supportDoubleSpeed_videoElement.focus(); }, 0);
 
 			// Tell the top level window to cancel any pending play actions
 			window.top.postMessage('goodTube_cancelPlay', '*');
