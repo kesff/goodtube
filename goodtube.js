@@ -459,7 +459,9 @@
 			statement-banner-style-type-compact,
 			ytm-promoted-sparkles-web-renderer,
 			tp-yt-iron-overlay-backdrop,
-			#masthead-ad
+			#masthead-ad,
+
+			#offer-module
 			 {
 				display: none !important;
 			}
