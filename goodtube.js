@@ -925,11 +925,7 @@
 
 			// Get the Youtube player
 			// We target different elements here, it seems to change for different users? Weird stuff.
-			let youtubePlayer = document.querySelector('#movie_player');
-
-			if (!youtubePlayer || youtubePlayer.offsetHeight <= 0) {
-				youtubePlayer = document.querySelector('#player.ytd-watch-flexy');
-			}
+			let youtubePlayer = document.querySelector('#player');
 
 			if (!youtubePlayer || youtubePlayer.offsetHeight <= 0) {
 				youtubePlayer = document.querySelector('#ytd-player');
@@ -942,6 +938,10 @@
 			// This element helps during the loading of the page (if we use it we see the video a little sooner, which is nice)
 			if (!youtubePlayer || youtubePlayer.offsetHeight <= 0) {
 				youtubePlayer = document.querySelector('.html5-video-player');
+			}
+
+			if (!youtubePlayer || youtubePlayer.offsetHeight <= 0) {
+				youtubePlayer = document.querySelector('#movie_player');
 			}
 
 
@@ -2340,7 +2340,7 @@
 						</div> <!-- .goodTube_setting -->
 
 						<div class='goodTube_setting'>
-							<input type='checkbox' class='goodTube_option_hideEndScreen' name='goodTube_option_hideEndScren' id='goodTube_option_hideEndScreen'`+ hideEndScreen + `>
+							<input type='checkbox' class='goodTube_option_hideEndScreen' name='goodTube_option_hideEndScreen' id='goodTube_option_hideEndScreen'`+ hideEndScreen + `>
 							<label for='goodTube_option_hideEndScreen'>Hide end screen suggested videos</label>
 						</div> <!-- .goodTube_setting -->
 
