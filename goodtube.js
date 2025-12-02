@@ -1714,11 +1714,8 @@
 		}
 		// Otherwise, if we're viewing a playliust
 		else if (goodTube_playlist) {
-			// Populate the playlist info
-			goodTube_player_populatePlaylistInfo();
-
 			// Make sure the playlist info exists
-			if (!goodTube_playlist || !goodTube_playlistIndex) {
+			if (!goodTube_playlist) {
 				// Clear timeout first to solve memory leak issues
 				clearTimeout(goodTube_nav_videoEnded_timeout);
 
@@ -4026,6 +4023,30 @@
 
 			// Tell the top frame the video ended
 			window.top.postMessage('goodTube_videoEnded', '*');
+		});
+
+		// When the video is paused
+		videoElement.addEventListener('pause', function () {
+			// Check if it's ended (sometimes the ended event listener does not fire, this is a Youtube embed bug...)
+			if (document.querySelector('.ended-mode')) {
+				// Sync the main player, this ensures videos register as finished with the little red play bars
+				goodTube_iframe_syncMainPlayer(true);
+
+				// Tell the top frame the video ended
+				window.top.postMessage('goodTube_videoEnded', '*');
+			}
+		});
+
+		// When the video is seeked
+		videoElement.addEventListener('seeked', function () {
+			// Check if it's ended (sometimes the ended event listener does not fire, this is a Youtube embed bug...)
+			if (document.querySelector('.ended-mode')) {
+				// Sync the main player, this ensures videos register as finished with the little red play bars
+				goodTube_iframe_syncMainPlayer(true);
+
+				// Tell the top frame the video ended
+				window.top.postMessage('goodTube_videoEnded', '*');
+			}
 		});
 	}
 
