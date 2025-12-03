@@ -1716,6 +1716,9 @@
 		else if (goodTube_playlist) {
 			// Make sure the playlist info exists
 			if (!goodTube_playlist) {
+				// Populate the playlist info
+				goodTube_player_populatePlaylistInfo();
+
 				// Clear timeout first to solve memory leak issues
 				clearTimeout(goodTube_nav_videoEnded_timeout);
 
