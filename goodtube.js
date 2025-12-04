@@ -2015,8 +2015,8 @@
 				// Play the video via the page API (this is the only reliable way)
 				goodTube_page_api.playVideo();
 
-				// Sync the current time using the page API - 500ms (this is the only reliable way)
-				goodTube_page_api.seekTo((syncTime - .5));
+				// Sync the current time using the page API - 50ms (this is the only reliable way)
+				goodTube_page_api.seekTo((syncTime - .05));
 
 				// Then mute the video via the page API (this helps to prevent audio flashes)
 				goodTube_page_api.mute();
