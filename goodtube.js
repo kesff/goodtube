@@ -993,11 +993,12 @@
 
 		// Make sure we have access to the page API
 		if (goodTube_page_api && typeof goodTube_page_api.getPlaylist === 'function' && typeof goodTube_page_api.getPlaylistIndex === 'function') {
-			goodTube_playlist = goodTube_page_api.getPlaylist();
-			goodTube_playlistIndex = goodTube_page_api.getPlaylistIndex();
+			// Get the new playlist data
+			let playlist_updated = goodTube_page_api.getPlaylist();
+			let playlistIndex_updated = goodTube_page_api.getPlaylistIndex();
 
 			// If the playlist info isn't ready yet
-			if (!goodTube_playlist) {
+			if (!playlist_updated) {
 				// Clear timeout first to solve memory leak issues
 				clearTimeout(goodTube_player_populatePlaylistInfo_timeout);
 
@@ -1007,6 +1008,10 @@
 				// Don't do anything else
 				return;
 			}
+
+			// The data is ok, so let's use it
+			goodTube_playlist = playlist_updated;
+			goodTube_playlistIndex = playlistIndex_updated;
 		}
 		// Otherwise, we don't have access to the frame API
 		else {
