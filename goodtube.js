@@ -964,66 +964,62 @@
 	}
 
 	// Populate the playlist info
-	let goodTube_player_populatePlaylistInfo_timeout = setTimeout(() => {}, 0);
 	function goodTube_player_populatePlaylistInfo() {
-		// Re fetch the page API
-		goodTube_page_api = document.getElementById('movie_player');
+		// Create a variable to hold the playlist items
+		let playlist = [];
 
+		// Get the playlist items from the page
+		let playlistItems = document.querySelectorAll('.playlist-items ytd-playlist-panel-video-renderer');
 
-		// Get the video data
-		let videoData = false;
-		let videoId = false;
-		if (goodTube_page_api && typeof goodTube_page_api.getVideoData === 'function') {
-			videoData = goodTube_page_api.getVideoData();
-			videoId = videoData.video_id;
-		}
+		// For each playlist item
+		playlistItems.forEach((playlistItem, index) => {
+			// Create a variable to output the video id
+			let videoId = '';
 
-		// If the correct video hasn't loaded yet (based on the ID in the query params)
-		if (!videoData || videoId !== goodTube_getParams['v']) {
-			// Clear timeout first to solve memory leak issues
-			clearTimeout(goodTube_player_populatePlaylistInfo_timeout);
+			// Target the thumbnail link
+			let link = playlistItem.querySelector('#thumbnail');
 
-			// Try again
-			goodTube_player_populatePlaylistInfo_timeout = setTimeout(goodTube_player_populatePlaylistInfo, 100);
+			// If we found the thumbnail link
+			if (link) {
+				// Get the href
+				let href = link.getAttribute('href');
 
-			// Don't do anything else
-			return;
-		}
+				// If we found the href
+				if (href) {
+					// Get the ID from the URL
+					let bits = href.split('/watch?v=');
 
+					if (bits.length >= 1) {
+						bits = bits[1].split('&');
 
-		// Make sure we have access to the page API
-		if (goodTube_page_api && typeof goodTube_page_api.getPlaylist === 'function' && typeof goodTube_page_api.getPlaylistIndex === 'function') {
-			// Get the new playlist data
-			let playlist_updated = goodTube_page_api.getPlaylist();
-			let playlistIndex_updated = goodTube_page_api.getPlaylistIndex();
-
-			// If the playlist data isn't ready yet
-			if (!playlist_updated) {
-				// Clear timeout first to solve memory leak issues
-				clearTimeout(goodTube_player_populatePlaylistInfo_timeout);
-
-				// Try again
-				goodTube_player_populatePlaylistInfo_timeout = setTimeout(goodTube_player_populatePlaylistInfo, 100);
-
-				// Don't do anything else
-				return;
+						if (bits.length) {
+							videoId = bits[0]
+						}
+					}
+				}
 			}
 
-			// The playlist data is ok, so let's use it
-			goodTube_playlist = playlist_updated;
-			goodTube_playlistIndex = playlistIndex_updated;
-		}
-		// Otherwise, we don't have access to the frame API
-		else {
-			// Clear timeout first to solve memory leak issues
-			clearTimeout(goodTube_player_populatePlaylistInfo_timeout);
+			// If we found the video id
+			if (videoId) {
+				// Add it to the playlist array
+				playlist.push(videoId);
 
-			// Try again
-			goodTube_player_populatePlaylistInfo_timeout = setTimeout(goodTube_player_populatePlaylistInfo, 100);
+				// If the playlist item is currently being watched (we don't trust the "selected" attribute, it's wrong for queued videos...)
+				if (videoId === goodTube_getParams['v']) {
+					// Update the global playlist index variable
+					goodTube_playlistIndex = index;
+				}
+			}
+		});
 
-			// Don't do anything else
-			return;
+		// If we didn't find any playlist items
+		if (!playlistItems.length) {
+			// Set the global playlist index variable to 0
+			goodTube_playlistIndex = 0;
 		}
+
+		// Update the global playlist variable
+		goodTube_playlist = playlist;
 	}
 
 	// Load a video
@@ -1057,22 +1053,6 @@
 			if (typeof goodTube_getParams['t'] !== 'undefined') {
 				startTime = parseFloat(goodTube_getParams['t'].replace('s', ''));
 			}
-		}
-
-
-		// If we're viewing a playlist
-		let playlist = 'false';
-		if (typeof goodTube_getParams['i'] !== 'undefined' || typeof goodTube_getParams['index'] !== 'undefined' || typeof goodTube_getParams['list'] !== 'undefined') {
-			// Populate the GET params below to let the iframe know we're viewing a playlist
-			playlist = 'true';
-
-			// Populate the playlist info
-			goodTube_player_populatePlaylistInfo();
-		}
-		// Otherwise, remove playlist info
-		else {
-			goodTube_playlist = false;
-			goodTube_playlistIndex = 0;
 		}
 
 		// If we're loading for the first time
@@ -1721,9 +1701,6 @@
 		else if (goodTube_playlist) {
 			// Make sure the playlist info exists
 			if (!goodTube_playlist) {
-				// Populate the playlist info
-				goodTube_player_populatePlaylistInfo();
-
 				// Clear timeout first to solve memory leak issues
 				clearTimeout(goodTube_nav_videoEnded_timeout);
 
@@ -2185,6 +2162,9 @@
 
 		// If we're viewing a video
 		if (goodTube_helper_watchingVideo()) {
+			// Get the playlist info
+			goodTube_player_populatePlaylistInfo();
+
 			// Show or hide the end screen (based on autoplay, not the setting)
 			goodTube_nav_showHideEndScreen();
 
