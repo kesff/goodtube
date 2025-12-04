@@ -997,7 +997,7 @@
 			let playlist_updated = goodTube_page_api.getPlaylist();
 			let playlistIndex_updated = goodTube_page_api.getPlaylistIndex();
 
-			// If the playlist info isn't ready yet
+			// If the playlist data isn't ready yet
 			if (!playlist_updated) {
 				// Clear timeout first to solve memory leak issues
 				clearTimeout(goodTube_player_populatePlaylistInfo_timeout);
@@ -1009,7 +1009,7 @@
 				return;
 			}
 
-			// The data is ok, so let's use it
+			// The playlist data is ok, so let's use it
 			goodTube_playlist = playlist_updated;
 			goodTube_playlistIndex = playlistIndex_updated;
 		}
