@@ -1693,7 +1693,6 @@
 	}
 
 	// Video has ended
-	let goodTube_nav_videoEnded_timeout = setTimeout(() => {}, 0);
 	function goodTube_nav_videoEnded() {
 		// If autoplay is enabled
 		if (goodTube_autoplay === 'true') {
