@@ -1041,6 +1041,12 @@
 			return;
 		}
 
+		// If we're viewing a playlist
+		let playlist = 'false';
+		if (goodTube_playlist.length > 0 || typeof goodTube_getParams['i'] !== 'undefined' || typeof goodTube_getParams['index'] !== 'undefined' || typeof goodTube_getParams['list'] !== 'undefined') {
+			// Populate the GET params below to let the iframe know we're viewing a playlist
+			playlist = 'true';
+		}
 
 		// Setup the starting time
 		let startTime = 0;
