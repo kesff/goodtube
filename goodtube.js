@@ -270,9 +270,6 @@
 	// Are we in picture in picture?
 	let goodTube_pip = false;
 
-	// Are we syncing the main Youtube player?
-	let goodTube_syncingPlayer = false;
-
 	// A reference to the previous URL (used to detect when the page changes)
 	let goodTube_previousUrl = false;
 
@@ -702,7 +699,7 @@
 			else {
 				if (
 					!video.paused &&
-					(!goodTube_syncingPlayer && video.closest('#movie_player'))
+					video.closest('#movie_player')
 					&&
 					!video.closest('#inline_player')
 				) {
@@ -2001,7 +1998,7 @@
 			goodTube_page_api = document.getElementById('movie_player');
 
 			// Make sure the API is all good
-			if (!goodTube_page_api || typeof goodTube_page_api.seekTo !== 'function' || typeof goodTube_page_api.playVideo !== 'function' || typeof goodTube_page_api.mute !== 'function' || typeof goodTube_page_api.setVolume !== 'function') {
+			if (!goodTube_page_api || typeof goodTube_page_api.seekTo !== 'function') {
 				return;
 			}
 
@@ -2009,30 +2006,8 @@
 			// AND we've not already synced to this point (this stops it continuing to sync when ended for no reason, we also need to round it down as it seems to be unreliable)
 			// AND ads are not showing (we don't want to touch the the time when ads are playing, this triggers detection)
 			if (youtubeVideoElement && Math.floor(youtubeVideoElement.currentTime) !== Math.floor(syncTime) && !goodTube_helper_adsShowing()) {
-				// Set a variable to indicate we're syncing the player (this stops the automatic pausing of all videos)
-				goodTube_syncingPlayer = true;
-
-				// Play the video via the page API (this is the only reliable way)
-				goodTube_page_api.playVideo();
-
-				// Sync the current time using the page API - 50ms (this is the only reliable way)
-				goodTube_page_api.seekTo((syncTime - .05));
-
-				// Then mute the video via the page API (this helps to prevent audio flashes)
-				goodTube_page_api.mute();
-				goodTube_page_api.setVolume(0);
-
-				// Then mute the video via HTML (playing it unmutes it for some reason)
-				youtubeVideoElement.volume = 0;
-				youtubeVideoElement.muted = true;
-
-				// Clear timeout first to solve memory leak issues
-				clearTimeout(goodTube_receiveMessage_timeout);
-
-				// After 100ms stop syncing (and let the pause actions handle the pausing)
-				goodTube_receiveMessage_timeout = setTimeout(() => {
-					goodTube_syncingPlayer = false;
-				}, 100);
+				// Seek to the sync time
+				goodTube_page_api.seekTo(syncTime);
 			}
 		}
 
