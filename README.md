@@ -61,6 +61,9 @@ This is usually caused by another adblocker which Youtube is detecting. To fix t
 **I can't use the miniplayer**<br>
 The Youtube miniplayer is not supported. Instead this uses "Picture in Picture" mode, which is the new standard for the web. Unfortunately Firefox does not support the Picture in Picture API, so the button is disabled in Firefox until they decide to include this feature.
 
+**Transcripts are not working**<br>
+Unfortunately transcripts are currently not supported. I'm working on this, hang tight. Hopefully these will be added soon!<br>
+
 **Is this compatible with other Youtube extensions?**<br>
 Short answer - probably not. This heavily modifies how Youtube works in order to block ads. A key part of this is replacing the default Youtube player with their "embedded" player. This means that unless your extension also works for embedded Youtube videos (like where you view a Youtube video on another website), it generally won't be compatible. Unfortunately there's not much I can do to support these extensions as a result. Honestly though - you probably never needed them anyway, just play the video and be happy.
 
