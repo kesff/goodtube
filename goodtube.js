@@ -1721,9 +1721,6 @@
 
 	// Show or hide the end screen (based on autoplay, not the setting)
 	function goodTube_nav_showHideEndScreen() {
-		// Re fetch the page API
-		goodTube_page_api = document.getElementById('movie_player');
-
 		// Show the end screen
 		let hideEndScreen = false;
 
