@@ -2029,10 +2029,10 @@
 				// Clear timeout first to solve memory leak issues
 				clearTimeout(goodTube_receiveMessage_timeout);
 
-				// After 1000ms stop syncing (and let the pause actions handle the pausing)
+				// After 100ms stop syncing (and let the pause actions handle the pausing)
 				goodTube_receiveMessage_timeout = setTimeout(() => {
 					goodTube_syncingPlayer = false;
-				}, 1000);
+				}, 100);
 			}
 		}
 
