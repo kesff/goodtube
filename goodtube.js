@@ -289,7 +289,7 @@
 	let goodTube_playerIframeLoaded = false;
 
 	// Hold the playlist information
-	let goodTube_playlist = false;
+	let goodTube_playlist = [];
 	let goodTube_playlistIndex = 0;
 
 	// Is the "hide and mute ads" fallback active?
@@ -1041,13 +1041,6 @@
 			return;
 		}
 
-		// If we're viewing a playlist
-		let playlist = 'false';
-		if (goodTube_playlist.length > 0 || typeof goodTube_getParams['i'] !== 'undefined' || typeof goodTube_getParams['index'] !== 'undefined' || typeof goodTube_getParams['list'] !== 'undefined') {
-			// Populate the GET params below to let the iframe know we're viewing a playlist
-			playlist = 'true';
-		}
-
 		// Setup the starting time
 		let startTime = 0;
 
@@ -1073,7 +1066,7 @@
 			}
 
 			// Set the video source
-			goodTube_player.contentWindow.postMessage('goodTube_src_https://www.youtube.com/embed/' + goodTube_getParams['v'] + '?goodTubeEmbed=1&autoplay=1&goodTube_playlist=' + playlist + '&goodTube_autoplay=' + goodTube_autoplay + '&goodTube_playbackSpeed=' + goodTube_playbackSpeed + '&goodTube_hideInfoCards=' + goodTube_hideInfoCards + '&goodTube_hideEndScreen=' + goodTube_hideEndScreen + '&goodTube_instantPause=' + goodTube_instantPause + startTimeParam, '*');
+			goodTube_player.contentWindow.postMessage('goodTube_src_https://www.youtube.com/embed/' + goodTube_getParams['v'] + '?goodTubeEmbed=1&autoplay=1&goodTube_autoplay=' + goodTube_autoplay + '&goodTube_playbackSpeed=' + goodTube_playbackSpeed + '&goodTube_hideInfoCards=' + goodTube_hideInfoCards + '&goodTube_hideEndScreen=' + goodTube_hideEndScreen + '&goodTube_instantPause=' + goodTube_instantPause + startTimeParam, '*');
 
 			// Indicate we've completed the first load
 			goodTube_firstLoad = false;
@@ -1081,7 +1074,7 @@
 		// Otherwise, for all other loads
 		else {
 			// Load the video via the iframe api
-			goodTube_player.contentWindow.postMessage('goodTube_load_' + goodTube_getParams['v'] + '|||' + startTime + '|||' + playlist, '*');
+			goodTube_player.contentWindow.postMessage('goodTube_load_' + goodTube_getParams['v'] + '|||' + startTime, '*');
 		}
 
 		// Sync the starting time
@@ -1240,6 +1233,20 @@
 					goodTube_page_api.playVideo();
 				}, 100);
 			}
+		}
+	}
+
+	// Show or hide the previous button
+	function goodTube_player_showHidePrevButton() {
+		// If we're viewing a playlist
+		if (goodTube_playlist.length > 0) {
+			// Enable the previous button
+			goodTube_player.contentWindow.postMessage('goodTube_prevButton_true', '*');
+		}
+		// Otherwise, we're not viewing a playlist
+		else {
+			// Disable the previous button
+			goodTube_player.contentWindow.postMessage('goodTube_prevButton_false', '*');
 		}
 	}
 
@@ -1658,16 +1665,7 @@
 	------------------------------------------------------------------------------------------ */
 	// Play the next video
 	function goodTube_nav_next() {
-		// // Re fetch the page API
-		// goodTube_page_api = document.getElementById('movie_player');
-
-		// // Make sure it exists
-		// if (goodTube_page_api && typeof goodTube_page_api.nextVideo === 'function') {
-		// 	// Play the previous video
-		// 	goodTube_page_api.nextVideo();
-		// }
-
-		// Let's try this, see if we can evade detection better
+		// Go to the next video using the keyboard shortcut (evades detection)
 		goodTube_helper_shortcut('next');
 
 		// Debug message
@@ -1676,20 +1674,22 @@
 
 	// Play the previous video
 	function goodTube_nav_prev() {
-		// // Re fetch the page API
-		// goodTube_page_api = document.getElementById('movie_player');
+		// If we're viewing a playlist, and on the first item, go to the start of the track
+		if (goodTube_playlist.length > 0 && goodTube_playlistIndex === 0) {
+			// Go the the start of the video
+			goodTube_player.contentWindow.postMessage('goodTube_skipTo_0|||' + goodTube_getParams['v'], '*');
 
-		// // Make sure it exists
-		// if (goodTube_page_api && typeof goodTube_page_api.previousVideo === 'function') {
-		// 	// Play the previous video
-		// 	goodTube_page_api.previousVideo();
-		// }
+			// Debug message
+			console.log('[GoodTube] Restarting video...');
+		}
+		// Otherwise,
+		else {
+			// Go to the previous video using the keyboard shortcut (evades detection)
+			goodTube_helper_shortcut('previous');
 
-		// Let's try this, see if we can evade detection better
-		goodTube_helper_shortcut('previous');
-
-		// Debug message
-		console.log('[GoodTube] Playing previous video...');
+			// Debug message
+			console.log('[GoodTube] Playing previous video...');
+		}
 	}
 
 	// Video has ended
@@ -1701,19 +1701,7 @@
 			goodTube_nav_next();
 		}
 		// Otherwise, if we're viewing a playliust
-		else if (goodTube_playlist) {
-			// Make sure the playlist info exists
-			if (!goodTube_playlist) {
-				// Clear timeout first to solve memory leak issues
-				clearTimeout(goodTube_nav_videoEnded_timeout);
-
-				// Try again
-				goodTube_nav_videoEnded_timeout = setTimeout(goodTube_nav_videoEnded, 100);
-
-				// Don't do anything else
-				return;
-			}
-
+		else if (goodTube_playlist.length > 0) {
 			// If we're not on the last video
 			if (goodTube_playlistIndex < (goodTube_playlist.length - 1)) {
 				// Play the next video
@@ -1733,7 +1721,7 @@
 		}
 
 		// Otherwise, if we're viewing a playlist
-		else if (goodTube_playlist) {
+		else if (goodTube_playlist.length > 0) {
 			// Hide the end screen
 			hideEndScreen = true;
 
@@ -2143,6 +2131,9 @@
 			// Get the playlist info
 			goodTube_player_populatePlaylistInfo();
 
+			// Show or hide the previous button
+			goodTube_player_showHidePrevButton();
+
 			// Show or hide the end screen (based on autoplay, not the setting)
 			goodTube_nav_showHideEndScreen();
 
@@ -2289,6 +2280,13 @@
 				<div class='goodTube_modal_inner'>
 					<a class='goodTube_modal_closeButton' href='javascript:;'>&#10006;</a>
 
+					<div class='goodTube_title'>Issues with GoodTube on 4th and 5th of Dec (NOW FIXED!!)</div>
+					<div class='goodTube_content'>
+						<div class="goodTube_text">
+							Hey everyone, sorry for the interruption. There was a temporary issue with GoodTube which caused it to stop working for a day or so. I'm happy to say that this has now been resolved and everything should work again as expected. Sorry for the inconvenience and thank you for your patience. Doing my best to keep this up and running! <3
+						</div>
+					</div>
+
 					<div class='goodTube_title'>Settings</div>
 					<div class='goodTube_content'>
 
@@ -2365,13 +2363,11 @@
 						<div class='goodTube_donation'>
 							<div class="goodTube_text">
 								<strong>This adblocker is 100% free to use and always will be.<br>
-								It has helped over 175,000 people remove the unbearable ads from Youtube.</strong><br>
+								It has helped over 185,000 people remove the unbearable ads from Youtube.</strong><br>
 								<br>
 								This project has been made entirely by myself, as just one developer. Countless hours and late nights have gone into making this and I continue to work on updating and maintaining the project regularly. I remain dedicated to ensuring this solution continues to work for everyone (despite Youtube's best efforts to stop adblockers).<br>
 								<br>
-								Donations help to keep this project going and support the wider community who use it. If you would like to say thank you and can give something back, it would be greatly appreciated.<br>
-								<br>
-								<i>Update -<br>Seriously everyone, I am flat broke - so small donations help a lot. If everyone donated just $1 I could finally go travelling with my partner rather than just living week to week.</i> 🙏🏼
+								Donations help to keep this project going and support the wider community who use it. If you would like to say thank you and can give something back, it would be greatly appreciated.
 							</div>
 							<a href='https://tiptopjar.com/goodtube' target='_blank' rel='nofollow' class='goodTube_button'>Donate now</a>
 						</div> <!-- .goodTube_donation -->
@@ -2386,6 +2382,9 @@
 							<br>
 							<strong>Do I need to manually update this?</strong><br>
 							Nope, updates are pushed to you automatically so you don't have to do anything to use the latest version.<br>
+							<br>
+							<strong>I'm seeing a black square with no video</strong><br>
+							Try uninstalling both Tampermonkey and GoodTube and then reinstalling them. Most of the time this will resolve the issue. It's caused by a known bug in Chrome browsers, which hopefully they fix soon. If that doesn't work, you may have a conflicting extension. Try turning off your other extensions for a second, see if that works. Then turn them back on one at a time until you work out which one is causing the problem.<br>
 							<br>
 							<strong>Playlists skip to the next video every few seconds</strong><br>
 							This is usually caused by another adblocker which Youtube is detecting. To fix this problem, first disable all of your other adblockers (for Youtube only, you can leave them on for other websites). Then clear your cookies and cache (this is important). Once that's done, refresh Youtube and the problem should be fixed.<br>
@@ -3570,11 +3569,6 @@
 		// Enable picture in picture next and prev buttons
 		goodTube_iframe_enablePipButtons();
 
-		// Enable the prev button if required
-		if (goodTube_getParams['goodTube_playlist'] !== 'undefined' && goodTube_getParams['goodTube_playlist'] === 'true') {
-			goodTube_iframe_enablePrevButton();
-		}
-
 		// Sync the aspect ratio
 		goodTube_iframe_syncAspectRatio();
 
@@ -4626,18 +4620,6 @@
 			let bits = event.data.replace('goodTube_load_', '').split('|||');
 			let videoId = bits[0];
 			let startSeconds = parseFloat(bits[1]);
-			let viewingPlaylist = bits[2];
-
-			// If we're on a playlist
-			if (viewingPlaylist === 'true') {
-				// Enable the previous button
-				goodTube_iframe_enablePrevButton();
-			}
-			// Otherwise, we're not on a playlist
-			else {
-				// Disable the previous button
-				goodTube_iframe_disablePrevButton();
-			}
 
 			// Then load the new video
 			goodTube_iframe_loadVideo(videoId, startSeconds);
@@ -4741,6 +4723,16 @@
 			goodTube_helper_setCookie('goodTube_autoplay', 'false');
 			goodTube_autoplay = 'false';
 			goodTube_iframe_setAutoplay('false');
+		}
+
+		// Enable previous button
+		else if (event.data === 'goodTube_prevButton_true') {
+			goodTube_iframe_enablePrevButton();
+		}
+
+		// Disable previous button
+		else if (event.data === 'goodTube_prevButton_false') {
+			goodTube_iframe_disablePrevButton();
 		}
 	}
 

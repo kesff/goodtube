@@ -1,3 +1,6 @@
+## UPDATE - Issues with GoodTube on 4th and 5th of Dec - NOW FIXED!!
+Hey everyone, sorry for the interruption. There was a temporary issue with GoodTube which caused it to stop working for a day or so. I'm happy to say that this has now been resolved and everything should work again as expected. Sorry for the inconvenience and thank you for your patience. Doing my best to keep this up and running! <3
+
 # GoodTube - Free Youtube Adblocker
 **Hello and welcome to GoodTube, a free adblocker for Youtube.**
 
@@ -49,6 +52,9 @@ You can leave your adlockers on for other websites, they just need to be turned 
 **Do I need to update this?**<br>
 Nope, updates are pushed to you automatically so you don't have to do anything to use the latest version.
 
+**I'm seeing a black square with no video**<br>
+Try uninstalling both Tampermonkey and GoodTube and then reinstalling them. Most of the time this will resolve the issue. It's caused by a known bug in Chrome browsers, which hopefully they fix soon. If that doesn't work, you may have a conflicting extension. Try turning off your other extensions for a second, see if that works. Then turn them back on one at a time until you work out which one is causing the problem.
+
 **Playlists skip to the next video every few seconds**<br>
 This is usually caused by another adblocker which Youtube is detecting. To fix this problem, first disable all of your other adblockers (for Youtube only, you can leave them on for other websites). Then clear your cookies and cache (this is important). Once that's done, refresh Youtube and the problem should be fixed.
 
@@ -86,14 +92,11 @@ This plugins helps to keep this important resource free and available to everyon
 
 ## Make a Donation
 **This adblocker is 100% free to use and always will be.<br>
-It has helped over 175,000 people remove the unbearable ads from Youtube.**<br>
+It has helped over 185,000 people remove the unbearable ads from Youtube.**<br>
 
 This project has been made entirely by myself, as just one developer. Countless hours and late nights have gone into making this and I continue to work on updating and maintaining the project regularly. I remain dedicated to ensuring this solution continues to work for everyone (despite Youtube's best efforts to stop adblockers).<br>
 
 Donations help to keep this project going and support the wider community who use it. If you would like to say thank you and can give something back, it would be greatly appreciated.<br>
-
-<i>Update - <br>
-Seriously everyone, I am flat broke - so small donations help a lot. If everyone donated just $1 I could finally go travelling with my partner rather just than living week to week.</i> 🙏🏼<br>
 
 You can make a donation here:<br>
 https://tiptopjar.com/goodtube
