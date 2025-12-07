@@ -887,7 +887,7 @@
 
 		// Add video iframe embed (via proxy iframe)
 		let proxyIframe = document.createElement('iframe');
-		proxyIframe.src = 'https://wikipedia.org/wiki/Bruce_Lee?goodTubeProxy=1';
+		// proxyIframe.src = 'https://wikipedia.org/wiki/Bruce_Lee?goodTubeProxy=1';
 		proxyIframe.setAttribute('width', '100%');
 		proxyIframe.setAttribute('height', '100%');
 		proxyIframe.setAttribute('frameborder', '0');
@@ -897,6 +897,9 @@
 		proxyIframe.setAttribute('allowfullscreen', true);
 		proxyIframe.style.display = 'none';
 		playerWrapper.appendChild(proxyIframe);
+
+		// We need to use this method so it doesn't mess with the browser history
+		proxyIframe.contentWindow.location.replace('https://wikipedia.org/wiki/Bruce_Lee?goodTubeProxy=1');
 
 		// Expose these globally
 		goodTube_playerWrapper = playerWrapper;
@@ -5128,7 +5131,6 @@
 	// Add the Youtube iframe
 	function goodTube_proxyIframe_addYoutubeIframe() {
 		let youtubeIframe = document.createElement('iframe');
-		youtubeIframe.src = '';
 		youtubeIframe.setAttribute('width', '100%');
 		youtubeIframe.setAttribute('height', '100%');
 		youtubeIframe.setAttribute('frameborder', '0');
@@ -5164,14 +5166,17 @@
 		if (youtubeIframe) {
 			// Change the source of the youtube iframe
 			if (event.data.indexOf('goodTube_src_') !== -1) {
-				// First time just change the src
-				if (youtubeIframe.src === '' || youtubeIframe.src.indexOf('?goodTubeProxy=1') !== -1) {
-					youtubeIframe.src = event.data.replace('goodTube_src_', '');
-				}
-				// All other times, we need to use this weird method so it doesn't mess with our browser history
-				else {
-					youtubeIframe.contentWindow.location.replace(event.data.replace('goodTube_src_', ''));
-				}
+				// // First time just change the src
+				// if (youtubeIframe.src === '' || youtubeIframe.src.indexOf('?goodTubeProxy=1') !== -1) {
+				// 	youtubeIframe.src = event.data.replace('goodTube_src_', '');
+				// }
+				// // All other times, we need to use this weird method so it doesn't mess with our browser history
+				// else {
+				// 	youtubeIframe.contentWindow.location.replace(event.data.replace('goodTube_src_', ''));
+				// }
+
+				// We need to use this method so it doesn't mess with the browser history
+				youtubeIframe.contentWindow.location.replace(event.data.replace('goodTube_src_', ''));
 			}
 			// Pass all other messages down to the youtube iframe
 			else {
