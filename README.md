@@ -1,6 +1,3 @@
-## UPDATE - Issues with GoodTube on 4th and 5th of Dec - NOW FIXED!!
-Hey everyone, sorry for the interruption. There was a temporary issue with GoodTube which caused it to stop working for a day or so. I'm happy to say that this has now been resolved and everything should work again as expected. Sorry for the inconvenience and thank you for your patience. Doing my best to keep this up and running! <3
-
 # GoodTube - Free Youtube Adblocker
 **Hello and welcome to GoodTube, a free adblocker for Youtube.**
 

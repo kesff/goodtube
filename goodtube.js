@@ -2307,13 +2307,6 @@
 				<div class='goodTube_modal_inner'>
 					<a class='goodTube_modal_closeButton' href='javascript:;'>&#10006;</a>
 
-					<div class='goodTube_title'>Issues with GoodTube on 4th and 5th of Dec (NOW FIXED!!)</div>
-					<div class='goodTube_content'>
-						<div class="goodTube_text">
-							Hey everyone, sorry for the interruption. There was a temporary issue with GoodTube which caused it to stop working for a day or so. I'm happy to say that this has now been resolved and everything should work again as expected. Sorry for the inconvenience and thank you for your patience. Doing my best to keep this up and running! <3
-						</div>
-					</div>
-
 					<div class='goodTube_title'>Settings</div>
 					<div class='goodTube_content'>
 
