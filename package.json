@@ -1,8 +1,0 @@
-{
-	"scripts": {
-		"watch": "esbuild ./goodtube.js --bundle --outfile=./goodtube.min.js --bundle --watch --minify"
-	},
-	"devDependencies": {
-		"esbuild": "^0.26.0"
-	}
-}
