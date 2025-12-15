@@ -1,2 +1,2 @@
-# Fork archive of GoodTube - Free Youtube Adblocker
+Fork archive of GoodTube - Free Youtube Adblocker
 
